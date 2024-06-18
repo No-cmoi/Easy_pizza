@@ -3,12 +3,12 @@ import 'package:easy_pizza/models/pizza.dart';
 import 'package:flutter/material.dart';
 
 class CartProvider extends ChangeNotifier {
-final List<Pizza> _pizzaCart = [];
+  final List<Pizza> _pizzaCart = [];
   final Map<Pizza, int> _pizzaQuantities = {};
 
-UnmodifiableListView<Pizza> get pizzaCart => UnmodifiableListView(_pizzaCart);
+  UnmodifiableListView<Pizza> get pizzaCart => UnmodifiableListView(_pizzaCart);
 
-double totalCart = 0;
+  double totalCart = 0;
 
   void addPizza(Pizza pizza) {
     if (!_pizzaCart.contains(pizza)) {
@@ -37,15 +37,20 @@ double totalCart = 0;
 
   void clearPizza() {
     _pizzaCart.clear();
+    _pizzaQuantities.clear();
     totalCart = 0;
     notifyListeners();
   }
 
- int getQuantity(Pizza pizza) {
+  int getQuantity(Pizza pizza) {
     return _pizzaQuantities[pizza] ?? 0;
   }
 
+  void applyDiscount(double discountPercentage) {
+    if (discountPercentage > 0 && discountPercentage <= 100) {
+      double discountAmount = (discountPercentage / 100) * totalCart;
+      totalCart -= discountAmount;
+      notifyListeners();
+    }
   }
-
-
-
+}

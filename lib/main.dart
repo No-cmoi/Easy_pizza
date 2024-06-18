@@ -3,6 +3,8 @@ import 'package:easy_pizza/data/db.dart' as db;
 import 'package:easy_pizza/models/cart_provider.dart';
 import 'package:easy_pizza/models/likes_provider.dart';
 import 'package:easy_pizza/models/pizza.dart';
+import 'package:easy_pizza/models/user_provider.dart';
+
 import 'package:easy_pizza/screens/pizza_cart.dart';
 import 'package:easy_pizza/screens/pizzas_favorites.dart';
 import 'package:easy_pizza/screens/pizzas_details.dart';
@@ -11,13 +13,16 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+Future<void> main() async{
+  await dotenv.load(fileName: "easy_pizza.env");
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) =>LikesProvider()),
         ChangeNotifierProvider(create: (context) => CartProvider()),
+        ChangeNotifierProvider(create: (context) => UserProvider()),
       ],
       child: MainApp(),
     ));
@@ -47,10 +52,11 @@ final _router =GoRouter(
           ),
           GoRoute(
             path: '/cart',
-            builder: (context, state) => const PizzaCart(),
-          )
-        ],
-      );
+            builder: (context, state) => const PizzaCart(promotions: [],),
+          ),
+      ],
+  );
+        
 
    @override
   Widget build(BuildContext context) {
