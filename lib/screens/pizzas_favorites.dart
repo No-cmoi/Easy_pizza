@@ -33,6 +33,8 @@ class PizzaFavorites extends StatelessWidget {
               final pizza = db.pizzas.firstWhere((p) => p.id == pizzaId);
               return ListTile(
                 title: Text(pizza.name),
+                subtitle: Text('${pizza.ingredients.length.toString()} ingredients'),
+                      leading: const Image(image: AssetImage("images/pizza.png")),
               );
             },
           );
